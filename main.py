@@ -49,19 +49,19 @@ def parsing(tokens, last_line = 0):
 					print('input accepted')
 			else:
 				print('bad term on input:', token_type)
-				break
+				return (False, '')
 		elif inFS(token_type, stype):
 			rule = config.paring_table[stype][config.terminal.index(token_type)]
 			if rule < 0:
 				print ('Error in parsing')
-				break
+				return (False, '')
 			print('rule', rule)
 			for r in reversed(rules[rule]):
 				print (r)
 				stack.append(r)
 		print('stack', stack)
 
-	return ' '.join(output)
+	return (True, ' '.join(output))
 
 
 def scanner(line = ''):
@@ -90,7 +90,12 @@ def main(file = 'input.txt'):
 			tok = scanner(line.strip())
 			tokens += tok
 			# print (tok)
-			output += parsing(tok) + '\n'
+			res = parsing(tok)
+			if res[0]:
+				output += res[1]  + '\n'
+			else:
+				print ('Something wrong')
+				return 0
 	# output += parsing(tokens)
 	output += '0\n'
 	print (output)
